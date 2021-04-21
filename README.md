@@ -1,4 +1,4 @@
-# ARTIST-INFO
+# ARTISTI-INFO
 
 Tämä projekti on tehty harjoitustyönä JAMK:n Frontend-perusteet kurssilla.
 Frameworkina on käytetty Svelteä.
