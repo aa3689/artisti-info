@@ -1,14 +1,14 @@
 <script>
   import { Pulse } from 'svelte-loading-spinners';
   import { fade, fly } from 'svelte/transition';
-  import { flip } from 'svelte/animate';
   import Button from './Button.svelte';
 
-  let visible = true;
-  let artistInput;
-  let showInstructions = true;
-  let promise;
+  //let visible = true;
+  let artistInput; // Asetetaan käyttäjän syöttämä data
+  let showInstructions = true; // Käytetään hakukentän näyttämiseen / piilottamiseen
+  let promise; // Asetetaan haettu data
 
+  // Datan haku, parametrina käyttäjän syöttämä data
   const getArtist = async (artist) => {
     const response = await fetch(`https://www.theaudiodb.com/api/v1/json/1/search.php?s=${artist}`);
     if (!response.ok) {
@@ -34,27 +34,40 @@
   {/if}
 
   <div id="infoBox">
+    <!--
+      Näytetään hakukenttä, kunnes haku tehdään
+      'showInstructions' menee falseksi, kun tehdään haku
+    -->
     {#if showInstructions}
       <div />
     {:else}
+      <!--
+          Odotetaan haun valmistumista
+    -->
       {#await promise}
         <div>Ladataan tietoja...</div>
         <div class="loadingIcon"><Pulse size="90" color="gray" unit="px" duration="1s" /></div>
       {:then data}
-        {#if visible}
-          <div out:fly={{ y: 300, duration: 1000 }}>
-            <Button
-              on:click={() => {
-                showInstructions = true;
-              }}>Tee uusi haku</Button
-            >
-          </div>
-          <div in:fade={{ duration: 2000 }} out:fly={{ y: 300, duration: 1000 }}>
-            <img id="logo" src={data.strArtistLogo} alt="Logo for band / artist: {data.strArtist}" />
-            <div id="biography">{data.strBiographyEN}</div>
-          </div>
-        {/if}
+        <!--
+          Haun valmistumisen jälkeen näytetään artistin / bändin logo ja biografia
+    -->
+        <!-- {#if visible} -->
+        <div out:fly={{ y: 300, duration: 1000 }}>
+          <Button
+            on:click={() => {
+              showInstructions = true;
+            }}>Tee uusi haku</Button
+          >
+        </div>
+        <div in:fade={{ duration: 2000 }} out:fly={{ y: 300, duration: 1000 }}>
+          <img id="logo" src={data.strArtistLogo} alt="Logo for band / artist: {data.strArtist}" />
+          <div id="biography">{data.strBiographyEN}</div>
+        </div>
+        <!-- {/if} -->
       {:catch error}
+        <!--
+          Jos haun aikana tapahtui virhe niin näytetään se
+    -->
         <div out:fly={{ y: 300, duration: 1000 }}>
           <Button
             on:click={() => {
