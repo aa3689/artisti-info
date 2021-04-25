@@ -113,7 +113,6 @@
   }
 
   #container {
-    max-width: 850px;
     text-align: center;
     margin: 0 auto;
   }
@@ -130,7 +129,6 @@
   }
 
   #biography {
-    max-width: 80%;
     margin: 10px auto;
     max-width: 75%;
     font-family: 'Bookman Old Times', 'Times New Roman', serif;
