@@ -23,12 +23,15 @@
   // TEE TÄMÄ UUSIKSI!
 </script>
 
+<div id="videoContainer">
 <!--
   Odotetaan videoiden hakua
 -->
 {#await videoPromise}
-  <div>Ladataan tietoja...</div>
+<div id="awaitingVideos">
+  <p>Ladataan tietoja...</p>
   <div class="loadingIcon"><Pulse size="90" color="gray" unit="px" duration="1s" /></div>
+</div>
   <!--
     Esitetään jokainen haettu video omassa laatikossaan
     PAITSI ETTEI ESITETÄKÄÄN KOSKA TURVALLISUUSRAJOITUKSET
@@ -36,6 +39,12 @@
     Jos thumbnailia ei ole, esitetään placeholder-kuva
   -->
 {:then videoData}
+<div id="messageAboutVideosBox">
+  <p id="messageAboutVideos">Tässä oli tarkoitus näyttää haetut videot, mutta turvallisuussyistä johtuen se ei ole mahdollista.
+    Sveltelle on toki olemassa muutama node-moduuli, jotka toteuttaisivat tuon, mutta en halunnut ottaa niitä käyttöön.
+    Näytetään siis linkki videoon ja datan mukana tullut kuva ko. biisille (jos sellainen oli).
+  </p>
+</div>
   <div id="videoArea" in:fade={{ duration: 2000 }} out:fly={{ y: 300, duration: 1000 }}>
     {#each videoData as video}
       <div id="videoBox">
@@ -44,7 +53,7 @@
         {:else}
           <img class="albumPhoto" src={video.strTrackThumb} alt="Pictures" />
         {/if}
-        <a href={video.strMusicVid} id="videolink" target="_blank">{video.strMusicVid}</a>
+        <a href={video.strMusicVid} id="videolink" target="_blank">{video.strTrack}</a>
       </div>
     {/each}
   </div>
@@ -56,8 +65,18 @@
     Virhe: {error.message}
   </div>
 {/await}
+</div>
 
 <style>
+  #awaitingVideos {
+    text-align: center;
+  }
+
+  .loadingIcon {
+    display: inline-block;
+    margin-top: 25px;
+  }
+
   .error {
     font-family: 'Bookman Old Times', 'Times New Roman', serif;
     color: darkred;
@@ -68,7 +87,7 @@
     margin: 10px;
     display: grid;
     grid-template-columns: 45% 45%;
-    align-items: center;
+    justify-content: center;
   }
 
   #videoBox {
@@ -84,5 +103,18 @@
 
   #videolink {
     font-size: 0.8em;
+  }
+
+  #messageAboutVideosBox {
+    border: 2px red dotted;
+    padding: 10px;
+    margin: 5px;
+    text-align: justify;
+  }
+
+  #messageAboutVideos {
+    font-family: 'Bookman Old Times', 'Times New Roman', serif;
+    font-size: 1.2rem;
+    color: darkred;
   }
 </style>
