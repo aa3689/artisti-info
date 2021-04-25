@@ -1,6 +1,6 @@
 <script>
   import { Pulse } from 'svelte-loading-spinners';
-  import { fly } from 'svelte/transition';
+  import { fade, fly } from 'svelte/transition';
   import artistID from './artistID.js';
 
   let artistNumber = $artistID; // Asetetaan artistin ID artistNumber-muuttujaan
@@ -36,15 +36,15 @@
     Jos thumbnailia ei ole, esitetään placeholder-kuva
   -->
 {:then videoData}
-  <div id="videoArea">
+  <div id="videoArea" in:fade={{ duration: 2000 }} out:fly={{ y: 300, duration: 1000 }}>
     {#each videoData as video}
       <div id="videoBox">
         {#if video.strTrackThumb == null}
-          <div>EI KUVAA</div>
+          <img class="albumPhoto" src="/images/img_not_found.jpg" alt="Placeholder for album pic if one not found" />
         {:else}
-          <img src={video.strTrackThumb} alt="Pictures" width="400" height="400" />
+          <img class="albumPhoto" src={video.strTrackThumb} alt="Pictures" />
         {/if}
-        <div>{video.strMusicVid}</div>
+        <a href={video.strMusicVid} id="videolink" target="_blank">{video.strMusicVid}</a>
       </div>
     {/each}
   </div>
@@ -65,14 +65,24 @@
   }
 
   #videoArea {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
     margin: 10px;
+    display: grid;
+    grid-template-columns: 45% 45%;
+    align-items: center;
   }
 
   #videoBox {
     border: 3px solid gray;
     margin: 5px;
+    text-align: center;
+  }
+
+  .albumPhoto {
+    max-width: 100%;
+    height: auto;
+  }
+
+  #videolink {
+    font-size: 0.8em;
   }
 </style>
