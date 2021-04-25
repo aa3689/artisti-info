@@ -18,6 +18,9 @@
 
 <style>
   main {
+    display: grid;
+    grid-template-columns: 800px;
+    align-items: center;
     margin: 50px auto;
   }
 
