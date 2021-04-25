@@ -9,7 +9,6 @@
 
   const fetchVideos = () => dispatch('getVideos');
 
-  //let visible = true;
   let artistInput; // Tähän asetetaan käyttäjän syöttämä data
   let showSearch = true; // Käytetään hakukentän näyttämiseen / piilottamiseen
   let artistPromise; // Tähän asetetaan haettu data artistista / bändistä
@@ -62,13 +61,12 @@
           Odotetaan haun valmistumista (haettu data on promise-muuttujassa)
         -->
       {#await artistPromise}
-        <div>Ladataan tietoja...</div>
+        <p>Ladataan tietoja...</p>
         <div class="loadingIcon"><Pulse size="90" color="gray" unit="px" duration="1s" /></div>
         <!--
           Haun valmistumisen jälkeen näytetään artistin / bändin logo ja biografia
         -->
       {:then data}
-        <!-- {#if visible} -->
         <div out:fly={{ y: 300, duration: 1000 }}>
           <Button
             on:click={() => {
@@ -78,12 +76,11 @@
         </div>
         <div in:fade={{ duration: 2000 }} out:fly={{ y: 300, duration: 1000 }}>
           <img id="logo" src={data.strArtistLogo} alt="Logo for band / artist: {data.strArtist}" />
-          <div id="biography">{data.strBiographyEN}</div>
+          <p id="biography">{data.strBiographyEN}</p>
         </div>
         <div out:fly={{ y: 300, duration: 1000 }}>
           <Button on:click={fetchVideos}>Hae videoita</Button>
         </div>
-        <!-- {/if} -->
         <!--
           Jos haun aikana tapahtui virhe niin näytetään se
         -->
