@@ -13,4 +13,6 @@ Käyttäjä voi esimerkiksi hakea kaikki albumit kansikuvineen tai YouTube-video
 
 ## Käytetyt resurssit
 
+Projektin pohjana käytin aiemmin harjoituksena tehtyä lyrics-sovellusta.
 Datan haku: https://www.theaudiodb.com/api_guide.php
+Karuselli: https://github.com/beyonk-adventures/svelte-carousel
