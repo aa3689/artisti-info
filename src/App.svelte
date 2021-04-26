@@ -6,13 +6,19 @@
 
   function toggleVideos() {
     showVideos = true;
+    //console.log(showVideos)
+  }
+
+  function hideVideos() {
+    showVideos = false;
+    //console.log("hideVideos-funktio: " + showVideos)
   }
 </script>
 
 <main>
-  <Info on:getVideos={toggleVideos} />
+  <Info on:getVideos={toggleVideos} on:hideVideos={hideVideos} />
   {#if showVideos}
-    <Videos />
+    <Videos/>
   {/if}
 </main>
 

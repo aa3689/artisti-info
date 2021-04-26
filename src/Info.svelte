@@ -8,6 +8,10 @@
   const dispatch = createEventDispatcher();
 
   const fetchVideos = () => dispatch('getVideos');
+  function hideVideos() {
+    showSearch = true;
+    dispatch('hideVideos');
+  }
 
   let artistInput; // Tähän asetetaan käyttäjän syöttämä data
   let showSearch = true; // Käytetään hakukentän näyttämiseen / piilottamiseen
@@ -27,6 +31,7 @@
     //console.log(artistNumber);
     return data.artists[0];
   };
+
 </script>
 
 <div id="container">
@@ -68,16 +73,16 @@
         -->
       {:then data}
         <div out:fly={{ y: 300, duration: 1000 }}>
-          <Button
-            on:click={() => {
-              showSearch = true;
-            }}>Tee uusi haku</Button
+          <Button on:click={hideVideos}>Tee uusi haku</Button
           >
         </div>
         <div in:fade={{ duration: 2000 }} out:fly={{ y: 300, duration: 1000 }}>
           <img id="logo" src={data.strArtistLogo} alt="Logo for band / artist: {data.strArtist}" />
           <p id="biography">{data.strBiographyEN}</p>
         </div>
+        <!--
+          Videoiden hakunappi
+        -->
         <div out:fly={{ y: 300, duration: 1000 }}>
           <Button on:click={fetchVideos}>Hae videoita</Button>
         </div>
