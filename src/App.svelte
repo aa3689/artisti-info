@@ -1,8 +1,10 @@
 <script>
 import Info from './Info.svelte';
 import Videos from './Videos.svelte';
+import ExtraInfo from './ExtraInfo.svelte';
 
 let showVideos = false; // Määrittää näytetäänkö videot
+$: extraInfo = false; // Määrittää näytetäänkö lisätietoja artistista / bändistä
 
 // Näyttää videot
 function toggleVideos() {
@@ -14,12 +16,25 @@ function hideVideos() {
   showVideos = false;
   }
 
+// Näyttää lisätiedot
+function showExtraInfo() {
+  extraInfo = true;
+}
+
+// Piilottaa lisätiedot
+function hideExtraInfo() {
+  extraInfo = false;
+}
+
 </script>
 
 <main>
-  <Info on:getVideos={toggleVideos} on:hideVideos={hideVideos} />
+  <Info on:getVideos={toggleVideos} on:hideVideos={hideVideos} on:showExtraInfo={showExtraInfo} />
   {#if showVideos}
     <Videos/>
+  {/if}
+  {#if extraInfo}
+  <ExtraInfo on:hideExtraInfo={hideExtraInfo}/>
   {/if}
 </main>
 
