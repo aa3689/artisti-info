@@ -1,4 +1,4 @@
-# ARTISTI-INFO
+# ARTISTI-INFO / Toni Hiidenvuo
 
 Tämä projekti on tehty harjoitustyönä JAMK:n Frontend-perusteet kurssilla.
 Frameworkina on käytetty Svelteä.
