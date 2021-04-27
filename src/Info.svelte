@@ -6,7 +6,8 @@ import Button from './Button.svelte';
 import artistData from './artistData.js';
 
 const dispatch = createEventDispatcher();
-const fetchVideos = () => dispatch('getVideos');
+const getVideos = () => dispatch('getVideos');
+const showExtraInfo = () => dispatch('showExtraInfo');
 
 let artistInput; // Tähän asetetaan käyttäjän syöttämä data
 let showSearch = true; // Käytetään hakukentän näyttämiseen / piilottamiseen
@@ -30,6 +31,10 @@ const getArtist = async (artist) => {
 
 </script>
 
+<!--
+  Jos hakua ei suoritettu
+  niin näytetään otsikko sekä hakukenttä
+-->
 <div id="container">
   {#if showSearch}
     <div in:fade={{ duration: 1000 }}>
@@ -50,6 +55,7 @@ const getArtist = async (artist) => {
       >
     </div>
   {/if}
+
   <!--
     Näytetään hakukenttä, kunnes haku tehdään
     ('showSearch' menee falseksi)
@@ -58,12 +64,14 @@ const getArtist = async (artist) => {
     {#if showSearch}
       <div />
     {:else}
+
       <!--
           Odotetaan haun valmistumista (haettu data on artistPromise-muuttujassa)
         -->
       {#await artistPromise}
         <p>Ladataan tietoja...</p>
         <div class="loadingIcon"><Pulse size="90" color="gray" unit="px" duration="1s" /></div>
+
         <!--
           Haun valmistumisen jälkeen näytetään artistin / bändin logo ja biografia
         -->
@@ -79,9 +87,19 @@ const getArtist = async (artist) => {
         <!--
           Videoiden hakunappi
         -->
+        <div id="inlineButtons">
         <div out:fly={{ y: 300, duration: 1000 }}>
-          <Button on:click={fetchVideos}>Hae videoita</Button>
+          <Button on:click={getVideos}>Hae videoita</Button>
         </div>
+
+        <!--
+          Lisätiedot-nappi
+        -->
+        <div out:fly={{ y: 300, duration: 1000 }}>
+          <Button on:click={showExtraInfo}>Näytä lisätiedot</Button>
+        </div>
+      </div>
+
         <!--
           Jos haun aikana tapahtui virhe niin näytetään se
         -->
@@ -90,12 +108,20 @@ const getArtist = async (artist) => {
           <Button
             on:click={() => {
               showSearch = true;
-            }}>Tee uusi haku</Button
-          >
+            }}>Tee uusi haku</Button>
         </div>
         <div out:fly={{ y: 300, duration: 1000 }} class="error">
-          <p>Virhe: {error.message}</p>
+          <p>Artistia / bändiä ei löytynyt</p>
         </div>
+        <!--
+          details-elementti ja sen tyylimäärittelyt kopioitu @
+          https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details
+        -->
+        <details out:fly={{ y: 300, duration: 1000 }}>
+          <summary>Yksityiskohdat</summary>
+          <p>Virhe: {error.message}</p>
+        </details>
+
       {/await}
     {/if}
   </div>
@@ -138,4 +164,44 @@ const getArtist = async (artist) => {
     color: darkred;
     font-size: 2rem;
   }
+
+  details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+}
+
+  summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+}
+
+  details[open] {
+    padding: .5em;
+}
+
+  details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
+}
+
+#inlineButtons {
+  display: flex;
+  justify-content: space-between;
+  max-width: 30%;
+  margin: 20px auto;
+}
+
+@media (max-width: 810px) {
+    #inlineButtons {
+      max-width: 40%;
+    }
+}
+
+@media (max-width: 660px) {
+  #inlineButtons {
+    max-width: 50%;
+    }
+}
 </style>
