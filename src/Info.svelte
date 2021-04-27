@@ -194,6 +194,9 @@
     #inlineButtons {
       max-width: 40%;
     }
+    #biography {
+      max-width: 90%;
+    }
   }
 
   @media (max-width: 660px) {
