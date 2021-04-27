@@ -18,43 +18,48 @@ const getVideos = async (artistID) => {
     return videoPromise;
   };
 
-
 onMount(() => {
   videoPromise = getVideos(artistID);
 });
 
 </script>
 
-<div id="videoContainer">
 <!--
   Odotetaan videoiden hakua
 -->
+<div id="videoContainer">
 {#await videoPromise}
 <div id="awaitingVideos">
   <p>Ladataan tietoja...</p>
   <div class="loadingIcon"><Pulse size="90" color="gray" unit="px" duration="1s" /></div>
 </div>
 {:then videoData}
+
 <!--
-  Jos palvelu ei löytänyt videoita'
+  Jos palvelu ei löytänyt videoita
   niin esitetään viesti siitä
 -->
 {#if videoData == null}
 <div id="noVideos">
 <p class="error">Videoita ei löytynyt</p>
 </div>
-{:else}
+
 <!--
-  Viestilaatikko koskien video-ongelmaa
+  Muussa tapauksessa esitetään viesti
+  koskien videoita sekä itse "videot"
 -->
+{:else}
 <div id="messageAboutVideosBox">
-  <p id="messageAboutVideos">Tässä oli tarkoitus näyttää haetut videot, mutta turvallisuussyistä johtuen se ei ole mahdollista.
+  <p id="messageAboutVideos">
+    Tässä oli tarkoitus näyttää haetut videot, mutta turvallisuusrajoitteista johtuen se ei vaikuttanut kovin helpolta toteuttaa
+    (avainsana mahd. <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy#cross-origin_network_access" target="_blank">Cross-origin network access</a>).
     Sveltelle on toki olemassa muutama node-moduuli, jotka toteuttaisivat tuon, mutta en halunnut ottaa niitä käyttöön.
     Näytetään siis linkki videoon ja datan mukana tullut kuva ko. biisille (jos sellainen oli).
   </p>
 </div>
+
 <!--
-  Karuselli, jossa esitetään haetut videot
+  Karuselli, jossa esitetään haetut "videot"
 -->
   <div id="videoArea" in:fade={{ duration: 2000 }} out:fly={{ y: 300, duration: 1000 }}>
     <Carousel perPage={{800: 3, 650: 2}}>
@@ -79,10 +84,6 @@ onMount(() => {
     </Carousel>
   </div>
   {/if}
-<!-- {:catch error}
-  <div out:fly={{ y: 300, duration: 1000 }} class="error">
-    Virhe: {error.message}
-  </div> -->
 {/await}
 </div>
 
