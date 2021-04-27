@@ -1,58 +1,61 @@
 <script>
-    import Modal from './Modal.svelte';
-    import Button from './Button.svelte';
-    import artistData from './artistData.js';
-    import { createEventDispatcher } from 'svelte';
+  import Modal from './Modal.svelte';
+  import Button from './Button.svelte';
+  import artistData from './artistData.js';
+  import { createEventDispatcher } from 'svelte';
 
-    const dispatch = createEventDispatcher();
-    const hideExtraInfo = () => dispatch('hideExtraInfo');
-
+  const dispatch = createEventDispatcher();
+  const hideExtraInfo = () => dispatch('hideExtraInfo');
 </script>
 
 <Modal>
-    <div id="extraInfoBox">
-    <p>Perustamisvuosi: 
-        {#if $artistData.intFormedYear.length < 1}
+  <div id="extraInfoBox">
+    <p>
+      Perustamisvuosi:
+      {#if $artistData.intFormedYear.length < 1}
         Ei tiedossa
-        {:else}
+      {:else}
         {$artistData.intFormedYear}
-        {/if}
+      {/if}
     </p>
-    <p>Genre: 
-        {#if $artistData.strGenre.length < 1}
+    <p>
+      Genre:
+      {#if $artistData.strGenre.length < 1}
         Ei tiedossa
-        {:else}
+      {:else}
         {$artistData.strGenre}
-        {/if}
+      {/if}
     </p>
-    <p>Jäseniä: 
-        {#if $artistData.intMembers.length < 1}
+    <p>
+      Jäseniä:
+      {#if $artistData.intMembers.length < 1}
         Ei tiedossa
-        {:else}
+      {:else}
         {$artistData.intMembers}
-        {/if}
+      {/if}
     </p>
-    <p>Kotoisin: 
-        {#if $artistData.strCountry.length < 1}
+    <p>
+      Kotoisin:
+      {#if $artistData.strCountry.length < 1}
         Ei tiedossa
-        {:else}
+      {:else}
         {$artistData.strCountry}
-        {/if}
+      {/if}
     </p>
-    </div>
+  </div>
 
-    <div id="closeModal">
-        <Button on:click={hideExtraInfo}>Sulje</Button>
-    </div>
+  <div id="closeModal">
+    <Button on:click={hideExtraInfo}>Sulje</Button>
+  </div>
 </Modal>
 
 <style>
-    #extraInfoBox {
+  #extraInfoBox {
     font-family: 'Bookman Old Times', 'Times New Roman', serif;
     font-size: 1.2rem;
-    }
+  }
 
-    #closeModal {
-        text-align: center;
-    }
+  #closeModal {
+    text-align: center;
+  }
 </style>

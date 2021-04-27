@@ -1,34 +1,33 @@
 <script>
-import { Pulse } from 'svelte-loading-spinners';
-import { fade, fly } from 'svelte/transition';
-import { createEventDispatcher } from 'svelte';
-import Button from './Button.svelte';
-import artistData from './artistData.js';
+  import { Pulse } from 'svelte-loading-spinners';
+  import { fade, fly } from 'svelte/transition';
+  import { createEventDispatcher } from 'svelte';
+  import Button from './Button.svelte';
+  import artistData from './artistData.js';
 
-const dispatch = createEventDispatcher();
-const getVideos = () => dispatch('getVideos');
-const showExtraInfo = () => dispatch('showExtraInfo');
+  const dispatch = createEventDispatcher();
+  const getVideos = () => dispatch('getVideos');
+  const showExtraInfo = () => dispatch('showExtraInfo');
 
-let artistInput; // Tähän asetetaan käyttäjän syöttämä data
-let showSearch = true; // Käytetään hakukentän näyttämiseen / piilottamiseen
-let artistPromise; // Tähän asetetaan haettu data artistista / bändistä
+  let artistInput; // Tähän asetetaan käyttäjän syöttämä data
+  let showSearch = true; // Käytetään hakukentän näyttämiseen / piilottamiseen
+  let artistPromise; // Tähän asetetaan haettu data artistista / bändistä
 
-// Tuo hakukentän esiin ja piilottaa haetut videot
-function hideVideos() {
-  showSearch = true;
-  dispatch('hideVideos');
-}
+  // Tuo hakukentän esiin ja piilottaa haetut videot
+  function hideVideos() {
+    showSearch = true;
+    dispatch('hideVideos');
+  }
 
-// Datan haku, parametrina käyttäjän syöttämä data.
-// Asetetaan haetun artistin / bändin ID storeen
-// sekä palautetaan haetun artistin / bändin data
-const getArtist = async (artist) => {
-  const response = await fetch(`https://www.theaudiodb.com/api/v1/json/1/search.php?s=${artist}`);
-  const data = await response.json();
-  artistData.set(data.artists[0]);
-  return data.artists[0];
+  // Datan haku, parametrina käyttäjän syöttämä data.
+  // Asetetaan haetun artistin / bändin ID storeen
+  // sekä palautetaan haetun artistin / bändin data
+  const getArtist = async (artist) => {
+    const response = await fetch(`https://www.theaudiodb.com/api/v1/json/1/search.php?s=${artist}`);
+    const data = await response.json();
+    artistData.set(data.artists[0]);
+    return data.artists[0];
   };
-
 </script>
 
 <!--
@@ -64,7 +63,6 @@ const getArtist = async (artist) => {
     {#if showSearch}
       <div />
     {:else}
-
       <!--
           Odotetaan haun valmistumista (haettu data on artistPromise-muuttujassa)
         -->
@@ -77,8 +75,7 @@ const getArtist = async (artist) => {
         -->
       {:then data}
         <div out:fly={{ y: 300, duration: 1000 }}>
-          <Button on:click={hideVideos}>Tee uusi haku</Button
-          >
+          <Button on:click={hideVideos}>Tee uusi haku</Button>
         </div>
         <div in:fade={{ duration: 2000 }} out:fly={{ y: 300, duration: 1000 }}>
           <img id="logo" src={data.strArtistLogo} alt="Logo for band / artist: {data.strArtist}" />
@@ -88,17 +85,17 @@ const getArtist = async (artist) => {
           Videoiden hakunappi
         -->
         <div id="inlineButtons">
-        <div out:fly={{ y: 300, duration: 1000 }}>
-          <Button on:click={getVideos}>Hae videoita</Button>
-        </div>
+          <div out:fly={{ y: 300, duration: 1000 }}>
+            <Button on:click={getVideos}>Hae videoita</Button>
+          </div>
 
-        <!--
+          <!--
           Lisätiedot-nappi
         -->
-        <div out:fly={{ y: 300, duration: 1000 }}>
-          <Button on:click={showExtraInfo}>Näytä lisätiedot</Button>
+          <div out:fly={{ y: 300, duration: 1000 }}>
+            <Button on:click={showExtraInfo}>Näytä lisätiedot</Button>
+          </div>
         </div>
-      </div>
 
         <!--
           Jos haun aikana tapahtui virhe niin näytetään se
@@ -108,7 +105,8 @@ const getArtist = async (artist) => {
           <Button
             on:click={() => {
               showSearch = true;
-            }}>Tee uusi haku</Button>
+            }}>Tee uusi haku</Button
+          >
         </div>
         <div out:fly={{ y: 300, duration: 1000 }} class="error">
           <p>Artistia / bändiä ei löytynyt</p>
@@ -121,7 +119,6 @@ const getArtist = async (artist) => {
           <summary>Yksityiskohdat</summary>
           <p>Virhe: {error.message}</p>
         </details>
-
       {/await}
     {/if}
   </div>
@@ -168,40 +165,40 @@ const getArtist = async (artist) => {
   details {
     border: 1px solid #aaa;
     border-radius: 4px;
-    padding: .5em .5em 0;
-}
+    padding: 0.5em 0.5em 0;
+  }
 
   summary {
     font-weight: bold;
-    margin: -.5em -.5em 0;
-    padding: .5em;
-}
+    margin: -0.5em -0.5em 0;
+    padding: 0.5em;
+  }
 
   details[open] {
-    padding: .5em;
-}
+    padding: 0.5em;
+  }
 
   details[open] summary {
     border-bottom: 1px solid #aaa;
-    margin-bottom: .5em;
-}
+    margin-bottom: 0.5em;
+  }
 
-#inlineButtons {
-  display: flex;
-  justify-content: space-between;
-  max-width: 30%;
-  margin: 20px auto;
-}
+  #inlineButtons {
+    display: flex;
+    justify-content: space-between;
+    max-width: 30%;
+    margin: 20px auto;
+  }
 
-@media (max-width: 810px) {
+  @media (max-width: 810px) {
     #inlineButtons {
       max-width: 40%;
     }
-}
+  }
 
-@media (max-width: 660px) {
-  #inlineButtons {
-    max-width: 50%;
+  @media (max-width: 660px) {
+    #inlineButtons {
+      max-width: 50%;
     }
-}
+  }
 </style>
