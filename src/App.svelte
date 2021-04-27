@@ -1,18 +1,19 @@
 <script>
-  import Info from './Info.svelte';
-  import Videos from './Videos.svelte';
+import Info from './Info.svelte';
+import Videos from './Videos.svelte';
 
-  let showVideos = false;
+let showVideos = false; // Määrittää näytetäänkö videot
 
-  function toggleVideos() {
-    showVideos = true;
-    //console.log(showVideos)
+// Näyttää videot
+function toggleVideos() {
+  showVideos = true;
   }
 
-  function hideVideos() {
-    showVideos = false;
-    //console.log("hideVideos-funktio: " + showVideos)
+// Piilottaa videot
+function hideVideos() {
+  showVideos = false;
   }
+
 </script>
 
 <main>
@@ -30,9 +31,15 @@
     margin: 50px auto;
   }
 
-  @media (min-width: 640px) {
+  @media (max-width: 810px) {
     main {
-      max-width: none;
+      grid-template-columns: 650px;
+    }
+  }
+
+  @media (max-width: 660px) {
+    main {
+      grid-template-columns: 500px;
     }
   }
 </style>

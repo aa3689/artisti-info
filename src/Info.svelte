@@ -1,35 +1,31 @@
 <script>
-  import { Pulse } from 'svelte-loading-spinners';
-  import { fade, fly } from 'svelte/transition';
-  import Button from './Button.svelte';
-  import { createEventDispatcher } from 'svelte';
-  import artistID from './artistID.js';
+import { Pulse } from 'svelte-loading-spinners';
+import { fade, fly } from 'svelte/transition';
+import { createEventDispatcher } from 'svelte';
+import Button from './Button.svelte';
+import artistData from './artistData.js';
 
-  const dispatch = createEventDispatcher();
+const dispatch = createEventDispatcher();
+const fetchVideos = () => dispatch('getVideos');
 
-  const fetchVideos = () => dispatch('getVideos');
-  function hideVideos() {
-    showSearch = true;
-    dispatch('hideVideos');
-  }
+let artistInput; // Tähän asetetaan käyttäjän syöttämä data
+let showSearch = true; // Käytetään hakukentän näyttämiseen / piilottamiseen
+let artistPromise; // Tähän asetetaan haettu data artistista / bändistä
 
-  let artistInput; // Tähän asetetaan käyttäjän syöttämä data
-  let showSearch = true; // Käytetään hakukentän näyttämiseen / piilottamiseen
-  let artistPromise; // Tähän asetetaan haettu data artistista / bändistä
-  let artistNumber; // Tähän asetetaan haetun artistin ID myöhäisempiä hakuja varten
+// Tuo hakukentän esiin ja piilottaa haetut videot
+function hideVideos() {
+  showSearch = true;
+  dispatch('hideVideos');
+}
 
-  // Datan haku, parametrina käyttäjän syöttämä data
-  const getArtist = async (artist) => {
-    const response = await fetch(`https://www.theaudiodb.com/api/v1/json/1/search.php?s=${artist}`);
-    if (!response.ok) {
-      throw new Error('Haku epäonnistui');
-    }
-    const data = await response.json();
-    const temp = data.artists[0];
-    artistNumber = temp.idArtist;
-    artistID.set(artistNumber);
-    //console.log(artistNumber);
-    return data.artists[0];
+// Datan haku, parametrina käyttäjän syöttämä data.
+// Asetetaan haetun artistin / bändin ID storeen
+// sekä palautetaan haetun artistin / bändin data
+const getArtist = async (artist) => {
+  const response = await fetch(`https://www.theaudiodb.com/api/v1/json/1/search.php?s=${artist}`);
+  const data = await response.json();
+  artistData.set(data.artists[0]);
+  return data.artists[0];
   };
 
 </script>
@@ -63,7 +59,7 @@
       <div />
     {:else}
       <!--
-          Odotetaan haun valmistumista (haettu data on promise-muuttujassa)
+          Odotetaan haun valmistumista (haettu data on artistPromise-muuttujassa)
         -->
       {#await artistPromise}
         <p>Ladataan tietoja...</p>
@@ -98,7 +94,7 @@
           >
         </div>
         <div out:fly={{ y: 300, duration: 1000 }} class="error">
-          Virhe: {error.message}
+          <p>Virhe: {error.message}</p>
         </div>
       {/await}
     {/if}

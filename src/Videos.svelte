@@ -1,27 +1,28 @@
 <script>
-  import { Pulse } from 'svelte-loading-spinners';
-  import { fade, fly } from 'svelte/transition';
-  import Carousel from '@beyonk/svelte-carousel';
-	import { ChevronLeftIcon, ChevronRightIcon } from 'svelte-feather-icons';
-  import artistID from './artistID.js';
+import { Pulse } from 'svelte-loading-spinners';
+import { fade, fly } from 'svelte/transition';
+import Carousel from '@beyonk/svelte-carousel';
+import { ChevronLeftIcon, ChevronRightIcon } from 'svelte-feather-icons';
+import { onMount } from 'svelte';
+import artistData from './artistData.js';
 
-  let artistNumber = $artistID; // Asetetaan artistin ID artistNumber-muuttujaan
-  let videoPromise; // Tähän asetetaan haettu data videoista
+let artistID = $artistData.idArtist; // Asetetaan artistin ID-numero tähän
+let videoPromise; // Asetetaan haettu data videoista tähän
 
-  // Datan haku, haetaan haeutun artistin / bändin videoita YouTubesta
-  const getVideos = async (artistNumber) => {
-    //console.log(artistNumber);
-    const response = await fetch(`https://theaudiodb.com/api/v1/json/1/mvid.php?i=${artistNumber}`);
-    if (!response.ok) {
-      throw new Error('Haku epäonnistui');
-    }
+// Datan haku, parametrina haetun artistin / bändin ID-numero
+// Haetaan ko. artistin / bändin videoita YouTubesta
+const getVideos = async (artistID) => {
+    const response = await fetch(`https://theaudiodb.com/api/v1/json/1/mvid.php?i=${artistID}`);
     const data = await response.json();
     videoPromise = data.mvids;
     return videoPromise;
   };
 
-  videoPromise = getVideos(artistNumber); // Suorittaa haun kun moduuli ladataan.
-  // TEE TÄMÄ UUSIKSI!
+
+onMount(() => {
+  videoPromise = getVideos(artistID);
+});
+
 </script>
 
 <div id="videoContainer">
@@ -33,27 +34,30 @@
   <p>Ladataan tietoja...</p>
   <div class="loadingIcon"><Pulse size="90" color="gray" unit="px" duration="1s" /></div>
 </div>
-  <!--
-    Esitetään jokainen haettu video omassa laatikossaan
-    PAITSI ETTEI ESITETÄKÄÄN KOSKA TURVALLISUUSRAJOITUKSET
-    Niinpä esitetään vain thumbnail kyseisestä biisistä ja linkki videoon.
-    Jos thumbnailia ei ole, esitetään placeholder-kuva
-  -->
 {:then videoData}
+<!--
+  Jos palvelu ei löytänyt videoita'
+  niin esitetään viesti siitä
+-->
 {#if videoData == null}
 <div id="noVideos">
 <p class="error">Videoita ei löytynyt</p>
 </div>
 {:else}
+<!--
+  Viestilaatikko koskien video-ongelmaa
+-->
 <div id="messageAboutVideosBox">
   <p id="messageAboutVideos">Tässä oli tarkoitus näyttää haetut videot, mutta turvallisuussyistä johtuen se ei ole mahdollista.
     Sveltelle on toki olemassa muutama node-moduuli, jotka toteuttaisivat tuon, mutta en halunnut ottaa niitä käyttöön.
     Näytetään siis linkki videoon ja datan mukana tullut kuva ko. biisille (jos sellainen oli).
   </p>
 </div>
+<!--
+  Karuselli, jossa esitetään haetut videot
+-->
   <div id="videoArea" in:fade={{ duration: 2000 }} out:fly={{ y: 300, duration: 1000 }}>
-
-    <Carousel perPage={3}>
+    <Carousel perPage={{800: 3, 650: 2}}>
       <span class="control" slot="left-control">
         <ChevronLeftIcon />
       </span>
@@ -73,16 +77,12 @@
         <ChevronRightIcon />
       </span>
     </Carousel>
-
   </div>
-  <!--
-    Jos haun aikana tapahtui virhe niin näytetään se
-  -->
   {/if}
-{:catch error}
+<!-- {:catch error}
   <div out:fly={{ y: 300, duration: 1000 }} class="error">
     Virhe: {error.message}
-  </div>
+  </div> -->
 {/await}
 </div>
 
@@ -102,14 +102,14 @@
     font-size: 1.2rem;
   }
 
-  #videoArea {
-    margin: 10px;
-    width: 800px;
-  }
-
   #videoBox {
     margin: 5px;
     text-align: center;
+  }
+
+  #videoArea {
+    max-width: 95%;
+    margin: 0 auto;
   }
 
   .albumPhoto {
