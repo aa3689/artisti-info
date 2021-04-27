@@ -78,7 +78,7 @@
           <Button on:click={hideVideos}>Tee uusi haku</Button>
         </div>
         <div in:fade={{ duration: 2000 }} out:fly={{ y: 300, duration: 1000 }}>
-          <img id="logo" src={data.strArtistLogo} alt="Logo for band / artist: {data.strArtist}" />
+          <img id="logo" src={data.strArtistLogo} alt="Artistin / bändin {data.strArtist} logo" />
           <p id="biography">{data.strBiographyEN}</p>
         </div>
         <!--

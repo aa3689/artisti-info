@@ -74,10 +74,10 @@
                     class="albumPhoto"
                     src="/images/img_not_found.jpg"
                     title={video.strTrack}
-                    alt="Placeholder for album pic if one not found"
+                    alt="Varakuva jos biisin kuvaa ei saatavilla"
                   />
                 {:else}
-                  <img class="albumPhoto" src={video.strTrackThumb} title={video.strTrack} alt="Pictures" />
+                  <img class="albumPhoto" src={video.strTrackThumb} title={video.strTrack} alt="Biisin kuva" />
                 {/if}
               </a>
               <p id="songName">{video.strTrack}</p>
