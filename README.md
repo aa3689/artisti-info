@@ -8,11 +8,20 @@ Frameworkina on käytetty Svelteä.
 Sovellus pyytää ensin käyttäjältä artistin tai bändin nimeä
 ja hakee sitten ko. artistin / bändin esittelyn _TheAudioDB_:n avoimesta rajapinnasta.
 
-Tämän jälkeen käyttäjälle tarjotaan uusia hakuvaihtoehtoja kyseisestä artistista / bändistä.
-Käyttäjä voi esimerkiksi hakea kaikki albumit kansikuvineen tai YouTube-videoita.
+Tämän jälkeen käyttäjä voi tarkastella lisätietoja hakukohteestaan
+tai hakea ko. artistin / bändin videoita.
 
 ## Käytetyt resurssit
 
-Projektin pohjana käytin aiemmin harjoituksena tehtyä lyrics-sovellusta.
-Datan haku: https://www.theaudiodb.com/api_guide.php
-Karuselli: https://github.com/beyonk-adventures/svelte-carousel
+Projektin pohjana käytin aiemmin harjoituksena tehtyä lyrics-sovellusta, <br>
+lisäksi Button ja Modal -komponentit olivat jo valmiiksi olemassa.<br>
+Datan haku: https://www.theaudiodb.com/api_guide.php <br>
+Karuselli: https://github.com/beyonk-adventures/svelte-carousel <br>
+
+## Käyttöönotto
+
+```
+git clone https://github.com/aa3689/artisti-info.git
+npm install
+npm run dev
+```
